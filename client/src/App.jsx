@@ -3,9 +3,11 @@ import React, { useState } from "react";
 function App() {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   async function sendMessage(e) {
     e.preventDefault();
+    setLoading(true);
     if (text.trim() === "") return;
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setText("");
@@ -18,6 +20,7 @@ function App() {
     });
     const data = await res.json();
     setMessages((prev) => [...prev, { role: "ai", content: data.reply }]);
+    setLoading(false);
   }
 
   return (
@@ -29,6 +32,7 @@ function App() {
           </div>
         ))}
       </div>
+      {loading && <p>Loading...</p>}
       <form onSubmit={sendMessage}>
         <input
           type="text"
