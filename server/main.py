@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 @app.route("/ai", methods=["POST"])
 @cross_origin(origins=["http://localhost:5173"])
+
 def ai():
     try:
         request_json = request.get_json()
