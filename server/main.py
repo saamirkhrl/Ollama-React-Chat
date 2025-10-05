@@ -3,23 +3,20 @@ from flask_cors import CORS
 from ollama import chat, ChatResponse
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:5173"])
 
-@app.route("/ai")
+@app.route("/ai", methods=["POST"])
 def ai():
-    if request.method == "POST":
-        request_text = request.get_json()
-        if request_text and "text" in request_text:
-            response: ChatResponse = chat(model='llama3', messages=[
-                {
-                    'role': 'user',
-                    'content': request_text
-                }
-            ])
-
-        if response:
-            return jsonify(response.message.content)
-        
+    request_json = request.get_json()
+    if request_json and "message" in request_json:
+        response: ChatResponse = chat(model='llama3', messages=[
+            {
+                'role': 'user',
+                'content': request_json["message"]
+            }
+        ])
+        return jsonify({"reply": response.message.content})
+    return jsonify({"reply": "No message provided."}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)
