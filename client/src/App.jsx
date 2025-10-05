@@ -9,7 +9,7 @@ function App() {
     if (text.trim() === "") return;
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setText("");
-    const res = await fetch("http://localhost:5000/ai", {
+    const res = await fetch("http://localhost:5001/ai", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
